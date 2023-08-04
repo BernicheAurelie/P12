@@ -14,6 +14,7 @@ class ClientAdmin(admin.ModelAdmin):
     # exclude = ('')
     # what we see in admin:
     # list_display = ('first_name', 'last_name', 'email', 'phone', "date_created", 'date_updated', 'sales_contact', 'existing')
+    list_display = ['first_name', 'last_name', 'email', 'phone', "date_created", 'date_updated', 'sales_contact', 'existing_status']
     # filters and search fields
     list_filter = ('first_name', 'last_name', 'email', 'phone', "date_created", 'date_updated', 'sales_contact', 'existing')
     search_fields = ('first_name', 'last_name', 'email', 'phone', "date_created", 'date_updated', 'sales_contact', 'existing')

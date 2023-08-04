@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import warnings
+warnings.filterwarnings(action="ignore")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000/']
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
 # Application definition
 
 INSTALLED_APPS = [
@@ -103,6 +107,7 @@ DATABASES = {
     }
 }
 
+# DJANGO_SETTINGS_MODULE = 'epic_events.settings'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -132,7 +137,7 @@ LOGOUT_REDIRECT_URL = '/authentification/login/'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'utc'
 
 USE_I18N = True
 

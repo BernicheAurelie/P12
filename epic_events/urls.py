@@ -24,7 +24,6 @@ from clients.urls import router as client_router
 from contracts.urls import router as contract_router
 from events.urls import router as event_router
 
-
 router = SimpleRouter()
 router.registry.extend(user_router.registry)
 router.registry.extend(client_router.registry)
