@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from permissions import IsManager, IsAdmin
+from permissions import IsManager, IsAdmin, IsOwnerProfile
 from users.models import User, User_role
 from users.serializers import UserSerializer, UserListSerializer, UserRoleSerializer
 
@@ -11,7 +11,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, IsAdmin | IsManager]
+    permission_classes = [IsAuthenticated, IsAdmin | IsManager | IsOwnerProfile]
     filterset_fields = ['role','is_admin']
     search_fields = ['username','email']
     ordering_fields = ['role', 'username']
@@ -39,17 +39,18 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         user = User.objects.get(id=self.kwargs['pk'])
-        print("serializer.data: ", serializer.validated_data)
+        # print("serializer.data: ", serializer.validated_data)
         try: 
             password = serializer.validated_data['password']
-            serializer.save()  
             user.set_password(password)
             user.save()
+            serializer.save()
         except KeyError:
             password = user.password
-            serializer.save()
             user.set_password(password)
             user.save()
+            serializer.save()
+        # print("user password **************", user.password)
           
 
     def list(self, request):

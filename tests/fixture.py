@@ -38,7 +38,6 @@ class TestSetUp(APITestCase):
             email="user1@test.com", role=role1, is_admin= "True", password= "test1234"
             )
         user1 = User.objects.get(first_name="test1")
-        print("*********** test1 user1 (id) : ", user1.id)
         # self.user1.set_password("test1234")
         # self.user1.save()
         
@@ -72,9 +71,6 @@ class TestSetUp(APITestCase):
             client=self.client_1, saler_contact=self.saler_1, amount=250
         )
         self.contract_2 = Contract.objects.create(
-            client=self.client_1, saler_contact=self.user1, amount=1000
-        )
-        self.contract_3 = Contract.objects.create(
             client=self.client_2, saler_contact=self.user1, amount=1000
         )
         self.event_status_1_upcoming = Event_status.objects.create(
@@ -94,8 +90,8 @@ class TestSetUp(APITestCase):
         event_status_2_current = Event_status.objects.get(id=2)
         event_status_3_finished = Event_status.objects.get(id=3)
         
-        self.event_1 = Event.objects.create(
-            client_id=self.client_1, support_contact=self.technician_1, contract=self.contract_1, attendees=15,
+        self.event_2 = Event.objects.create(
+            client_id=self.client_2, support_contact=self.technician_1, contract=self.contract_2, attendees=15,
             event_status=event_status_1_upcoming, notes='ras'
         )
         

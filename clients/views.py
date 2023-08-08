@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from permissions import IsAdmin, Readonly, IsSalerForClient, IsTechnicianForClients
+from permissions import IsAdmin, IsManager, Readonly, IsSalerForClient, IsTechnicianForClients
 from utils import logger
 from clients.models import Client
 from clients.serializers import ClientSerializer
@@ -14,7 +14,7 @@ class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = [IsAuthenticated, IsAdmin | Readonly | IsSalerForClient | IsTechnicianForClients]
+    permission_classes = [IsAuthenticated, IsAdmin | IsManager | Readonly | IsSalerForClient | IsTechnicianForClients]
     filterset_fields = ['last_name', 'email']
     search_fields = ['last_name', 'email']
 

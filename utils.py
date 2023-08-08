@@ -7,7 +7,7 @@ def custom_exception_handler(exc, context):
     # to get the standard error response.
     response = exception_handler(exc, context)
     if response is not None:
-        response.data["message"] = "event creation impossible if contract not signed"
+        # response.data["message"] = "event creation impossible if contract not signed"
         return response
 
 
