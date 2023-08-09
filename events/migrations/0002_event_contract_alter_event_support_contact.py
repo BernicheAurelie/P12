@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("contracts", "0002_alter_contract_saler_contact_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

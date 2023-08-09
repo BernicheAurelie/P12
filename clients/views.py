@@ -10,31 +10,33 @@ from events.models import Event
 
 
 class ClientViewSet(viewsets.ModelViewSet):
-
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = [IsAuthenticated, IsAdmin | IsManager | Readonly | IsSalerForClient ]
-    filterset_fields = ['last_name', 'email']
-    search_fields = ['last_name', 'email']
+    permission_classes = [
+        IsAuthenticated,
+        IsAdmin | IsManager | Readonly | IsSalerForClient,
+    ]
+    filterset_fields = ["last_name", "email"]
+    search_fields = ["last_name", "email"]
 
     def perform_create(self, serializer):
         logger.debug("perform_create client")
         try:
-            sales_contact = serializer.validated_data['sales_contact']
+            sales_contact = serializer.validated_data["sales_contact"]
             serializer.save(sales_contact=sales_contact)
-        except KeyError:   
+        except KeyError:
             serializer.save(sales_contact=self.request.user)
 
     def perform_update(self, serializer):
         logger.debug("perform_update client")
-        client = Client.objects.get(id=self.kwargs['pk'])
+        client = Client.objects.get(id=self.kwargs["pk"])
         try:
-            sales_contact = serializer.validated_data['sales_contact']
+            sales_contact = serializer.validated_data["sales_contact"]
             serializer.save(sales_contact=sales_contact)
-        except KeyError:   
+        except KeyError:
             serializer.save(sales_contact=client.sales_contact)
-    
+
     def get_queryset(self):
         clients = Client.objects.all()
         # events = Event.objects.filter(support_contact=self.request.user)

@@ -6,4 +6,4 @@ from .views import UserViewSet
 app_name = "users"
 
 router = SimpleRouter(trailing_slash=False)
-router.register(r"users/?", UserViewSet, basename='users')
+router.register(r"users/?", UserViewSet, basename="users")

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from .models import Contract
 
-class ContractSerializer(serializers.ModelSerializer):
 
+class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract
-        fields = '__all__'
+        fields = "__all__"

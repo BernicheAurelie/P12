@@ -4,7 +4,6 @@ from users.models import User
 
 
 class Client(models.Model):
-    
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
     email = models.EmailField(max_length=100, unique=True)
@@ -13,12 +12,14 @@ class Client(models.Model):
     company_name = models.CharField(max_length=250)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    sales_contact = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='saler_id')
+    sales_contact = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name="saler_id"
+    )
     existing = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
-    
+
     def existing_status(self):
         existing_status = self.existing
         if existing_status:
@@ -28,5 +29,5 @@ class Client(models.Model):
         return format_html("<span style=color:%s>%s</span>" % (color, existing_status))
 
     class Meta:
-        verbose_name = 'Client'
-        verbose_name_plural = 'Clients'
+        verbose_name = "Client"
+        verbose_name_plural = "Clients"

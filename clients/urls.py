@@ -6,7 +6,7 @@ from .views import ClientViewSet
 app_name = "clients"
 
 router = SimpleRouter(trailing_slash=False)
-router.register(r"clients/?", ClientViewSet, basename='clients')
+router.register(r"clients/?", ClientViewSet, basename="clients")
 
 # urlpatterns = [
 #     path('', include(clients_router.urls)),

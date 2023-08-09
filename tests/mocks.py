@@ -20,20 +20,20 @@ user1 = {
     "username": "test1",
     "email": "user1@test.com",
     "role": 1,
-    "is_admin" : "True",
+    "is_admin": "True",
     "password": "test1234",
 }
 user1_login = {
-    "username": user1['username'],
-    "password": user1['password'],
+    "username": user1["username"],
+    "password": user1["password"],
 }
 user_wrong_username = {
     "username": "bad_name",
-    "password": user1['password'],
+    "password": user1["password"],
 }
 user_wrong_password = {
-    "username": user1['username'],
-    "password": 'bad_password',
+    "username": user1["username"],
+    "password": "bad_password",
 }
 user2 = {
     "first_name": "test2",
@@ -41,7 +41,7 @@ user2 = {
     "username": "test2",
     "email": "user2@test.com",
     "role": 2,
-    "is_admin" : "True",
+    "is_admin": "True",
     "password": "test1234",
 }
 user3 = {
@@ -50,7 +50,7 @@ user3 = {
     "username": "test3",
     "email": "user3@test.com",
     "role": 3,
-    "is_admin" : "True",
+    "is_admin": "True",
     "password": "test1234",
 }
 manager_1 = {
@@ -59,7 +59,7 @@ manager_1 = {
     "username": "manager_1",
     "email": "manager_1@test.com",
     "role": 1,
-    "is_admin" : "False",
+    "is_admin": "False",
     "password": "test1234",
 }
 saler_1 = {
@@ -68,7 +68,7 @@ saler_1 = {
     "username": "saler_1",
     "email": "saler_1@test.com",
     "role": 2,
-    "is_admin" : "False",
+    "is_admin": "False",
     "password": "test1234",
 }
 technician_1 = {
@@ -77,6 +77,6 @@ technician_1 = {
     "username": "technician_1",
     "email": "technician_1@test.com",
     "role": 3,
-    "is_admin" : "False",
+    "is_admin": "False",
     "password": "test1234",
 }

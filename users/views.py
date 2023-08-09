@@ -8,13 +8,12 @@ from users.serializers import UserSerializer, UserListSerializer, UserRoleSerial
 
 
 class UserViewSet(viewsets.ModelViewSet):
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsAdmin | IsManager | IsOwnerProfile]
-    filterset_fields = ['role','is_admin']
-    search_fields = ['username','email']
-    ordering_fields = ['role', 'username']
+    filterset_fields = ["role", "is_admin"]
+    search_fields = ["username", "email"]
+    ordering_fields = ["role", "username"]
 
     # def create(self, request, *args, **kwargs):
     #     password=request.data["password"]
@@ -28,20 +27,20 @@ class UserViewSet(viewsets.ModelViewSet):
     #             "message": "User successfully created"
     #         }
     #     )
-    
+
     def perform_create(self, serializer):
-        password = serializer.validated_data['password']
-        username = serializer.validated_data['username']
+        password = serializer.validated_data["password"]
+        username = serializer.validated_data["username"]
         serializer.save()
         user = User.objects.get(username=username)
         user.set_password(password)
         user.save()
 
     def perform_update(self, serializer):
-        user = User.objects.get(id=self.kwargs['pk'])
+        user = User.objects.get(id=self.kwargs["pk"])
         # print("serializer.data: ", serializer.validated_data)
-        try: 
-            password = serializer.validated_data['password']
+        try:
+            password = serializer.validated_data["password"]
             user.set_password(password)
             user.save()
             serializer.save()
@@ -51,7 +50,6 @@ class UserViewSet(viewsets.ModelViewSet):
             user.save()
             serializer.save()
         # print("user password **************", user.password)
-          
 
     def list(self, request):
         queryset = User.objects.all()
@@ -65,15 +63,15 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-class UserRoleViewSet(viewsets.ModelViewSet):
 
+class UserRoleViewSet(viewsets.ModelViewSet):
     queryset = User_role.objects.all()
     serializer_class = UserRoleSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
 
 
 # from rest_framework import generics
-# 
+#
 # class UserList(generics.ListAPIView):
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer

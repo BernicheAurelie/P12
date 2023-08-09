@@ -31,14 +31,13 @@ router.registry.extend(contract_router.registry)
 router.registry.extend(event_router.registry)
 
 urlpatterns = [
-    path('admin/', admin.site.urls, name="admin"),
-    path('authentification/', include('rest_framework.urls')),
-    path('', include(router.urls)),
-    
+    path("admin/", admin.site.urls, name="admin"),
+    path("authentification/", include("rest_framework.urls")),
+    path("", include(router.urls)),
 ]
 
-    # path("accounts/profile/", auth_views.LoginView.as_view(template_name="registration/login.html")),
-    # path("accounts/profile/", TemplateView.as_view(template_name="registration/login.html")),
-    # path("authentification/login/", TemplateView.as_view(url="/authentification/login/")),
-    # path("authentification/logout/", RedirectView.as_view(url="/authentification/logout/")),
-    # path("authentification/logout/?next=/users/", RedirectView.as_view(url="/authentification/logout/")),
+# path("accounts/profile/", auth_views.LoginView.as_view(template_name="registration/login.html")),
+# path("accounts/profile/", TemplateView.as_view(template_name="registration/login.html")),
+# path("authentification/login/", TemplateView.as_view(url="/authentification/login/")),
+# path("authentification/logout/", RedirectView.as_view(url="/authentification/logout/")),
+# path("authentification/logout/?next=/users/", RedirectView.as_view(url="/authentification/logout/")),
