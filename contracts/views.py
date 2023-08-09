@@ -24,7 +24,6 @@ class ContractViewSet(viewsets.ModelViewSet):
         if client.sales_contact == self.request.user or client.sales_contact==None:
             try:
                 saler_contact = request.data['saler_contact']
-                print("************* saler_contact ******** :", saler_contact)
             except KeyError:
                 request.data['saler_contact'] = self.request.user.pk
             request.POST._mutable = False
@@ -35,7 +34,7 @@ class ContractViewSet(viewsets.ModelViewSet):
                     client.existing = True
                     client.save()
                 else:
-                    logger.warning(f"Signed status not True: client existing stay {client.existing}")
+                    logger.warning(f"Signed status false: client maybe existing with another contract")
             except KeyError:
                 logger.info(f"Signed status not given: client existing stay {client.existing}")
             return Response(
@@ -54,7 +53,7 @@ class ContractViewSet(viewsets.ModelViewSet):
                         client.existing = True
                         client.save()
                     else:
-                        logger.warning(f"We shouldn't be there {self.request.user}!")
+                        logger.warning(f"Signed status false: client existing stay {client.existing}")
                 except KeyError:
                     logger.info(f"Signed status not given: client existing stay {client.existing}")
                 return Response(
@@ -78,14 +77,14 @@ class ContractViewSet(viewsets.ModelViewSet):
             )
 
     def update(self, request, *args, **kwargs):
-        request.POST._mutable = True
+        
         client = Client.objects.get(id=self.request.data["client"])
         contract = Contract.objects.get(id=self.kwargs['pk'])
         if contract.saler_contact == self.request.user or contract.saler_contact==None:
             try:
                 saler_contact = request.data['saler_contact']
-                request.POST._mutable = False
             except KeyError:
+                request.POST._mutable = True
                 request.data['saler_contact'] = contract.saler_contact.pk
                 request.POST._mutable = False
             try:
@@ -113,7 +112,7 @@ class ContractViewSet(viewsets.ModelViewSet):
                     client.existing = True
                     client.save()
                 else:
-                    logger.warning(f"We shouldn't be there {self.request.user}!")
+                    logger.warning(f"Signed status false: client existing stay {client.existing}")
             except KeyError:
                 logger.info(f"Signed status not given: client existing stay {client.existing}")
             return Response(
@@ -126,7 +125,7 @@ class ContractViewSet(viewsets.ModelViewSet):
             logger.info("you're not the client sales_contact" )
             return Response(
                 {
-                    "message": "Forbidden, you're neither in charge of this client nor manager."
+                    "message": "Forbidden, you're neither in charge of this client nor manager or administrator."
                 }
             )
 

@@ -22,8 +22,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         logger.debug("Creating event")
         events=Event.objects.filter(contract=self.request.data["contract"])
-        logger.debug("Contract already used for another event")
         if events.count()>0:
+            logger.debug("Contract already used for another event")
             return Response(
                 {
                     "result": request.data,
@@ -32,6 +32,7 @@ class EventViewSet(viewsets.ModelViewSet):
             )
         else:
             contract = Contract.objects.get(id=self.request.data["contract"])
+            logger.debug(f"Contract n°{contract.id}")
             if contract.signed_status == True :
                 if int(self.request.data["client_id"]) == int(contract.client.pk):
                     logger.debug(f"request.data[client_id]: {request.data['client_id']} == contract.client.pk : {contract.client.pk}")

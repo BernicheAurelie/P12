@@ -43,11 +43,11 @@ class TestSetUp(APITestCase):
         
         self.user2 = User.objects.create(
             first_name= "test2", last_name= "user2", username= "test2",
-            email="user2@test.com", role=role2, is_admin= "True", password= "test1234"
+            email="user2@test.com", role=role2, is_admin= "False", password= "test1234"
             )
         self.user3 = User.objects.create(
             first_name= "test3", last_name= "user3", username= "test3",
-            email="user3@test.com", role=role3, is_admin= "True", password= "test1234"
+            email="user3@test.com", role=role1, is_admin= "False", password= "test1234"
             )      
         self.manager_1 = User.objects.create(
             first_name= "manager_1", last_name= "manager_1", username= "manager_1",

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from permissions import IsAdmin, IsManager, Readonly, IsSalerForClient, IsTechnicianForClients
+from permissions import IsAdmin, IsManager, Readonly, IsSalerForClient
 from utils import logger
 from clients.models import Client
 from clients.serializers import ClientSerializer
@@ -14,7 +14,7 @@ class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = [IsAuthenticated, IsAdmin | IsManager | Readonly | IsSalerForClient | IsTechnicianForClients]
+    permission_classes = [IsAuthenticated, IsAdmin | IsManager | Readonly | IsSalerForClient ]
     filterset_fields = ['last_name', 'email']
     search_fields = ['last_name', 'email']
 
@@ -34,13 +34,6 @@ class ClientViewSet(viewsets.ModelViewSet):
             serializer.save(sales_contact=sales_contact)
         except KeyError:   
             serializer.save(sales_contact=client.sales_contact)
-            
-            # first_name = serializer.validated_data["first_name"]
-            # last_name=serializer.validated_data["last_name"]
-            # email=serializer.validated_data["email"]
-            # phone=serializer.validated_data["phone"]
-            # company_name=serializer.validated_data["company_name"]
-
     
     def get_queryset(self):
         clients = Client.objects.all()
