@@ -1,9 +1,7 @@
-import pytest
 from tests.fixture import TestSetUp
 from clients.models import Client
 
 
-@pytest.mark.django_db
 class TestClient(TestSetUp):
     def test_CRUD_for_client_for_sales_contact(self):
         self.client.force_login(self.saler_1)
@@ -193,12 +191,3 @@ class TestClient(TestSetUp):
             response1.data["detail"],
             "You do not have permission to perform this action.",
         )
-        # self.client.force_login(self.technician_1)
-        # response5 = self.client.get('/clients/')
-        # self.assertEqual(response5.status_code, 200)
-        # response6=self.client.patch('/clients/'+ str(self.client_2.id)+'/', data={'first_name': 'updating_forbidden'})
-        # self.assertEqual(response6.status_code, 403)
-        # self.assertEqual(response6.data['detail'], "You do not have permission to perform this action.")
-        # response7=self.client.delete('/clients/'+ str(self.client_2.id)+'/')
-        # self.assertEqual(response7.status_code, 403)
-        # self.assertEqual(response7.data['detail'], "You do not have permission to perform this action.")

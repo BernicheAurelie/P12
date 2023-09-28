@@ -1,7 +1,6 @@
 from rest_framework.response import Response
-from rest_framework import viewsets, filters
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Q
 from permissions import IsAdmin, IsManager, Readonly, IsSalerForContract
 from utils import logger
 from contracts.models import Contract
@@ -46,7 +45,7 @@ class ContractViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
         client = Client.objects.get(id=self.request.data["client"])
-        if client.sales_contact == self.request.user or client.sales_contact == None:
+        if client.sales_contact == self.request.user or client.sales_contact is None:
             try:
                 saler_contact = request.data["saler_contact"]
             except KeyError:
@@ -60,7 +59,7 @@ class ContractViewSet(viewsets.ModelViewSet):
                     client.save()
                 else:
                     logger.warning(
-                        f"Signed status false: client maybe existing with another contract"
+                        "Signed status false: client maybe existing with another contract"
                     )
             except KeyError:
                 logger.info(
@@ -69,7 +68,7 @@ class ContractViewSet(viewsets.ModelViewSet):
             return Response(
                 {"result": request.data, "message": "Contract successfully created"}
             )
-        elif self.request.user.is_admin == True or self.request.user.role.pk == 2:
+        elif self.request.user.is_admin is True or self.request.user.role.pk == 2:
             try:
                 saler_contact = request.data["saler_contact"]
                 super(ContractViewSet, self).create(request, *args, **kwargs)
@@ -87,18 +86,23 @@ class ContractViewSet(viewsets.ModelViewSet):
                         f"Signed status not given: client existing stay {client.existing}"
                     )
                 return Response(
-                    {"result": request.data, "message": "Contract successfully created"}
+                    {
+                        "result": request.data,
+                        "message": "Contract successfully created"
+                    }
                 )
             except KeyError:
                 return Response(
                     {
-                        "message": "saler_contact is required to create contract for managers or administrators"
+                        "message": "saler_contact is required"
                     }
                 )
         else:
             logger.info("you're not client sales_contact")
             return Response(
-                {"message": "Forbidden, you're not in charge of this client."}
+                {
+                    "message": "Forbidden, you're not in charge of this client."
+                }
             )
 
     def update(self, request, *args, **kwargs):
@@ -106,7 +110,7 @@ class ContractViewSet(viewsets.ModelViewSet):
         contract = Contract.objects.get(id=self.kwargs["pk"])
         if (
             contract.saler_contact == self.request.user
-            or contract.saler_contact == None
+            or contract.saler_contact is None
         ):
             try:
                 saler_contact = request.data["saler_contact"]
@@ -130,7 +134,7 @@ class ContractViewSet(viewsets.ModelViewSet):
             return Response(
                 {"result": request.data, "message": "Contract successfully updated"}
             )
-        elif self.request.user.is_admin == True or self.request.user.role.pk == 2:
+        elif self.request.user.is_admin is True or self.request.user.role.pk == 2:
             super(ContractViewSet, self).update(request, *args, **kwargs)
             try:
                 signed_status = request.data["signed_status"]
@@ -152,7 +156,7 @@ class ContractViewSet(viewsets.ModelViewSet):
             logger.info("you're not the client sales_contact")
             return Response(
                 {
-                    "message": "Forbidden, you're neither in charge of this client nor manager or administrator."
+                    "message": "You're neither in charge nor manager or administrator."
                 }
             )
 
@@ -160,5 +164,7 @@ class ContractViewSet(viewsets.ModelViewSet):
         contracts = Contract.objects.all()
         # clients=Client.objects.filter(sales_contact_id=self.request.user)
         # associated_clients = [client.id for client in clients]
-        # contracts = Contract.objects.filter(Q(saler_contact_id = self.request.user)| Q(client_id__in=associated_clients))
+        # contracts = Contract.objects.filter(
+        # Q(saler_contact_id = self.request.user)| Q(client_id__in=associated_clients)
+        # )
         return contracts

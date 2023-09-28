@@ -1,8 +1,8 @@
 from rest_framework.permissions import BasePermission
-from users.models import User, User_role
+from users.models import User
 from contracts.models import Contract
 from clients.models import Client
-from events.models import Event, Event_status
+from events.models import Event
 from utils import logger
 
 
@@ -46,11 +46,11 @@ class IsManager(BasePermission):
 
 
 class IsOwnerProfile(BasePermission):
-    logger.debug("Are you manager to access to users?")
+    logger.debug("Is you're own profile?")
 
     def has_permission(self, request, view):
+        logger.debug("user profile?")
         try:
-            logger.debug("user profile?")
             user = User.objects.get(id=view.kwargs["pk"])
             if user.id == request.user.pk and view.action in (
                 "list",
@@ -59,10 +59,11 @@ class IsOwnerProfile(BasePermission):
                 "partial_update",
             ):
                 logger.info(
-                    f"{request.user}: allowed, you can get and update your profile but not delete it"
+                    f"{request.user}: allowed, \
+                        you can get and update your profile but not delete it"
                 )
                 return True
-        except:
+        except KeyError:
             logger.warning(
                 f"{request.user}: you are {request.user.role}. Manage users forbidden"
             )
@@ -89,7 +90,7 @@ class IsSalerForClient(BasePermission):
                     f"{request.user.role} => not sales contact, update or delete forbidden"
                 )
                 return False
-        except:
+        except KeyError:
             logger.debug(f"{request.user}, client doesn't found => create or list")
             if request.user.role.pk == 1:
                 logger.info("Saler: allowed to create clients")
@@ -116,7 +117,7 @@ class IsSalerForContract(BasePermission):
             )
             if contract.saler_contact.id == request.user.pk:
                 logger.info(
-                    f"{request.user}, ok, you're saler contact for the contract :{contract.saler_contact}?"
+                    f"{request.user}, ok, you're saler contact for the contract"
                 )
                 return True
             else:
@@ -124,7 +125,7 @@ class IsSalerForContract(BasePermission):
                     f"{request.user} => you're not in charge => {view.action} is forbidden"
                 )
                 return False
-        except:
+        except KeyError:
             logger.debug(f"{request.user}, contract doesn't found => create or list")
             if request.user.role.pk == 1:
                 logger.info("Saler: allowed to create and get contracts")
@@ -138,11 +139,12 @@ class IsSalerForContract(BasePermission):
 
 class IsSalerForEvents(BasePermission):
     # allowed to create event when in charge for the contract
-    logger.debug("Are you saler to create events?")
+    logger.debug("Are you saler contact to create events?")
 
     def has_permission(self, request, view):
         logger.debug(
-            f"is saler contact for the contract? {request.user}, you're {request.user.role}, trying to: {view.action}"
+            f"is saler contact for the contract? {request.user}, \
+                you're {request.user.role}, trying to: {view.action}"
         )
         try:
             logger.debug("try to create event for the saler")
@@ -155,7 +157,8 @@ class IsSalerForEvents(BasePermission):
                     return True
                 else:
                     logger.warning(
-                        f"saler contact can't {view.action}, only allowed to saler contact, manager or administrator"
+                        f"saler contact can't {view.action}, \
+                            only allowed to technician, manager or administrator"
                     )
                     return False
             else:
@@ -163,31 +166,9 @@ class IsSalerForEvents(BasePermission):
                     f"Forbidden: saler contact for the contract is {contract.saler_contact}"
                 )
                 return False
-        except:
+        except KeyError:
             logger.warning("Contract not found")
             return False
-
-
-# """ Delete => equivalent to read only, eventually changed if tech can update client (for associated event)"""
-# class IsTechnicianForClients(BasePermission):
-#     logger.debug("Access client for associated events?")
-
-#     def has_permission(self, request, view):
-#         try:
-#             events = Event.objects.filter(support_contact=request.user)
-#             for event in events:
-#                 if event.client_id == view.kwargs['pk'] and view.action in ('list, retrieve'):
-#                     logger.info('you can read clients when you are support of an associated event')
-#                     return True
-#                 elif view.action not in ('list, retrieve'):
-#                     logger.warning(f'{view.action} only allowed to saler contact or administrator')
-#                     return False
-#                 else:
-#                     logger.warning("you're not in charge of an associated event")
-#                     return False
-#         except:
-#             logger.info(f"{request.user}, you're not in charge for any event")
-#             return False
 
 
 class IsTechnician(BasePermission):
@@ -210,47 +191,10 @@ class IsTechnician(BasePermission):
             else:
                 logger.warning(f"{request.user} => {view.action} is forbidden")
                 return False
-        except:
+        except KeyError:
             logger.debug(
-                f"{request.user}, event doesn't found, create event allowed to saler contact, manager or administrator"
+                f"{request.user}, event doesn't found, \
+                    create event allowed to saler contact, manager or administrator"
             )
             logger.warning(f"{request.user} => {view.action} is forbidden")
             return False
-
-
-# class IsTechnician(BasePermission):
-#     # allowed to CRUD for an event when is support_contact
-#     # and CRUD for associated client (event.client_id)
-#     logger.debug("Are you technician to access events?")
-
-#     def has_permission(self, request, view):
-#         logger.debug(f"is technician? {request.user}, you're {request.user.role}, trying to: {view.action}")
-#         try:
-#             event = Event.objects.get(id=view.kwargs['pk'])
-#             client = event.client_id
-#             logger.debug(f"event n°{view.kwargs['pk']}")
-#             if event.support_contact.id == request.user.pk:
-#                 logger.info(f"Allowed {request.user}: you are support for event n°{view.kwargs['pk']}")
-#                 return True
-#             elif view.action in ('list', 'retrieve'):
-#                 if request.user.role == 3:
-#                     logger.info("technician: allowed to get events")
-#                     return True
-#                 else:
-#                     logger.warning(f"{request.user.role} => not technician => forbidden")
-#                     return False
-#             else:
-#                 logger.warning(f"{request.user} => {view.action} is forbidden")
-#                 return False
-#         except:
-#             logger.debug(f"{request.user}, event doesn't found")
-#             if view.action in ('create', 'list', 'retrieve'):
-#                 if request.user.role.pk == 3:
-#                     logger.info("technician: allowed to create and get events")
-#                     return True
-#                 else:
-#                     logger.warning(f"{request.user.role} => not technician => forbidden")
-#                     return False
-#             else:
-#                 logger.warning(f"{request.user} => {view.action} is forbidden")
-#                 return False

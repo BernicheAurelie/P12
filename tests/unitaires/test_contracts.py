@@ -81,9 +81,6 @@ class TestContract(TestSetUp):
 
     def test_change_existing_status_for_client_when_contract_is_signed(self):
         self.client.force_login(self.saler_1)
-        # with pytest.raises(KeyError, match=r".* signed status not given .*"):
-        # with pytest.raises(KeyError) as excinfo:
-        #     assert "signed status not given" in str(excinfo.value)
         response = self.client.post(
             "/contracts/",
             data={
@@ -190,7 +187,7 @@ class TestContract(TestSetUp):
         )
         self.assertEqual(
             res.data["message"],
-            "saler_contact is required to create contract for managers or administrators",
+            "saler_contact is required",
         )
         response = self.client.post(
             "/contracts/",
@@ -251,7 +248,7 @@ class TestContract(TestSetUp):
         )
         self.assertEqual(
             res.data["message"],
-            "saler_contact is required to create contract for managers or administrators",
+            "saler_contact is required",
         )
         response = self.client.post(
             "/contracts/",

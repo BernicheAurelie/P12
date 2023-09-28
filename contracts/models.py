@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone, dateformat
-from datetime import date
 from django.utils.html import format_html
 from users.models import User
 from clients.models import Client

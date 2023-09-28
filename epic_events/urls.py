@@ -14,11 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.db import router
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
-from django.views.generic import RedirectView, TemplateView
 from users.urls import router as user_router
 from clients.urls import router as client_router
 from contracts.urls import router as contract_router
@@ -35,9 +33,3 @@ urlpatterns = [
     path("authentification/", include("rest_framework.urls")),
     path("", include(router.urls)),
 ]
-
-# path("accounts/profile/", auth_views.LoginView.as_view(template_name="registration/login.html")),
-# path("accounts/profile/", TemplateView.as_view(template_name="registration/login.html")),
-# path("authentification/login/", TemplateView.as_view(url="/authentification/login/")),
-# path("authentification/logout/", RedirectView.as_view(url="/authentification/logout/")),
-# path("authentification/logout/?next=/users/", RedirectView.as_view(url="/authentification/logout/")),

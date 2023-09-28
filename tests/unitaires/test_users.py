@@ -28,7 +28,7 @@ class TestUsers(TestSetUp):
         self.assertEqual(len(response2.json()), nbr_users+1)
         self.assertEqual(response2.status_code, 200)
         user = User.objects.get(username="test")
-        url=("/users/" + str(user.id) + "/")
+        url = ("/users/" + str(user.id) + "/")
         res = self.client.put(
             f"{url}",
             data={
@@ -38,7 +38,7 @@ class TestUsers(TestSetUp):
                 "email": "user@test.com",
                 "role": 1,
                 "is_admin": "False",
-                "password":str(user.password),
+                "password": str(user.password),
             },
         )
         response3 = self.client.patch(

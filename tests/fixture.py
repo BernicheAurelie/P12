@@ -14,7 +14,7 @@ class TestSetUp(APITestCase):
         role1 = User_role.objects.get(id=1)
         role2 = User_role.objects.get(id=2)
         role3 = User_role.objects.get(id=3)
-        
+
         self.user1 = User.objects.create(
             first_name="test1",
             last_name="user1",
@@ -50,7 +50,7 @@ class TestSetUp(APITestCase):
         )
         self.user3.set_password(self.user3.password)
         self.user3.save()
-        
+
         self.manager_1 = User.objects.create(
             first_name="manager_1",
             last_name="manager_1",
@@ -125,25 +125,3 @@ class TestSetUp(APITestCase):
             event_status=event_status_1_upcoming,
             notes="ras",
         )
-
-    # def tearDown(self):
-        # print("***************** clear db ***********")
-        # list_user = User.objects.all()
-        # print("******************** list user1: ", list_user)
-        # list_user_role = User_role.objects.all()
-        # print("******************** list user_role: ", list_user_role)
-        # clients = Client.objects.all()
-        # print("******************** list clients : ", clients)
-        # contracts = Contract.objects.all()
-        # print("******************** list contracts : ", contracts)
-        # events = Event.objects.all()
-        # print("******************** list events : ", events)
-        # User.objects.all().delete()
-        # user1 = User.objects.filter(first_name='test1')
-        # print("list empty: ", user1)
-        # User_role.objects.all().delete()
-        # Client.objects.all().delete()
-        # Contract.objects.all().delete()
-        # Event.objects.all().delete()
-        # Event_status.objects.all().delete()
-        # print("********* db empty ********* ")

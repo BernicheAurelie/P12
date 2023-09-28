@@ -1,12 +1,9 @@
-from django.shortcuts import render
-from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from permissions import IsAdmin, IsManager, Readonly, IsSalerForClient
 from utils import logger
 from clients.models import Client
 from clients.serializers import ClientSerializer
-from events.models import Event
 
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -41,5 +38,7 @@ class ClientViewSet(viewsets.ModelViewSet):
         clients = Client.objects.all()
         # events = Event.objects.filter(support_contact=self.request.user)
         # associated_clients = [event.client_id.id for event in events]
-        # clients = Client.objects.filter(Q (sales_contact_id=self.request.user)| Q (id__in=associated_clients))
+        # clients = Client.objects.filter(
+        # Q (sales_contact_id=self.request.user)| Q (id__in=associated_clients)
+        # )
         return clients

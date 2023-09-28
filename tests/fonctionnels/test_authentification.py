@@ -1,7 +1,6 @@
 import time
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 from tests.fonctionnels.test_setup import TestSetUp
 
 
@@ -11,7 +10,6 @@ class TestAuthentification(TestSetUp):
         self.browser.get("http://127.0.0.1:8000/authentification/login/")
         title = self.browser.find_element_by_tag_name('h3')
         assert "Django REST framework" in title.text
-
 
     def test_authentification_and_redirection_to_clients(self):
         self.browser.get("http://127.0.0.1:8000/authentification/login/")
@@ -32,7 +30,9 @@ class TestAuthentification(TestSetUp):
         form_password.send_keys("fred1234")
         form_password.send_keys(Keys.RETURN)
         error_message = self.browser.find_element_by_class_name("text-error")
-        self.assertEqual(error_message.text, 'Please enter a correct username and password. Note that both fields may be case-sensitive.')
+        self.assertEqual(
+            error_message.text, 'Please enter a correct username and password. Note that both fields may be case-sensitive.'
+        )
         self.assertEqual(self.browser.current_url, "http://127.0.0.1:8000/authentification/login/")
 
     def test_wrong_password_to_authentication(self):
@@ -43,10 +43,12 @@ class TestAuthentification(TestSetUp):
         form_password.send_keys("blabla")
         form_password.send_keys(Keys.RETURN)
         error_message = self.browser.find_element_by_class_name("text-error")
-        self.assertEqual(error_message.text, 'Please enter a correct username and password. Note that both fields may be case-sensitive.')
+        self.assertEqual(
+            error_message.text,
+            'Please enter a correct username and password. Note that both fields may be case-sensitive.'
+        )
         self.assertEqual(self.browser.current_url, "http://127.0.0.1:8000/authentification/login/")
 
-    
     def test_admin_authentification(self):
         self.browser.get("http://127.0.0.1:8000/admin/login/")
         form_username = self.browser.find_element_by_id("id_username")
@@ -70,7 +72,10 @@ class TestAuthentification(TestSetUp):
         form_password.send_keys(Keys.RETURN)
         self.assertEqual(self.browser.current_url, "http://127.0.0.1:8000/admin/login/")
         error_message = self.browser.find_element_by_class_name("errornote")
-        self.assertEqual(error_message.text , "Please enter the correct username and password for a staff account. Note that both fields may be case-sensitive.")
+        self.assertEqual(
+            error_message.text,
+            "Please enter the correct username and password for a staff account. Note that both fields may be case-sensitive."
+        )
 
     def test_add_user_from_admin(self):
         self.browser.get("http://127.0.0.1:8000/admin/login/")
@@ -96,15 +101,20 @@ class TestAuthentification(TestSetUp):
         select_group.click()
         select_perm = self.browser.find_element(By.XPATH, "//option[@value='33']")
         select_perm.click()
-        select = self.browser.find_element(By.ID, 'id_role') # <select name="role" required="" id="id_role">
+        # <select name="role" required="" id="id_role">
+        select = self.browser.find_element(By.ID, 'id_role')
+        # <option value="2">manager</option>
         select.send_keys(Keys.ARROW_DOWN)
-        select.send_keys(Keys.RETURN) # <option value="2">manager</option>  
-        time.sleep(10)    
+        select.send_keys(Keys.RETURN)
+        time.sleep(10)
         submit_button = self.browser.find_element(By.XPATH, "//input[@type='submit']")
         submit_button.click()
         time.sleep(10)
-        accueil_user = self.browser.find_element(By.ID, 'content') #<div id="content" class=""> <h1>Select user to change</h1>
+        # <div id="content" class=""> <h1>Select user to change</h1>
+        accueil_user = self.browser.find_element(By.ID, 'content')
         assert "Change user" in accueil_user.text
         new_user = self.browser.find_element_by_class_name("success")
-        print(new_user.text)
-        assert "The user “test_username” was added successfully. You may edit it again below." in new_user.text
+        assert (
+            "The user “test_username” was added successfully. You may edit it again below."
+            in new_user.text
+        )
