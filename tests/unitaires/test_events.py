@@ -1,10 +1,5 @@
 import pytest
-from django.shortcuts import get_object_or_404
-from rest_framework.test import APITestCase
 from tests.fixture import TestSetUp
-import tests.mocks as mock
-from users.models import User
-from clients.models import Client
 from contracts.models import Contract
 from events.models import Event
 

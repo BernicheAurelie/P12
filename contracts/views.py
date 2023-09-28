@@ -69,7 +69,7 @@ class ContractViewSet(viewsets.ModelViewSet):
             return Response(
                 {"result": request.data, "message": "Contract successfully created"}
             )
-        elif self.request.user.role.pk == 2 or self.request.user.is_admin == True:
+        elif self.request.user.is_admin == True or self.request.user.role.pk == 2:
             try:
                 saler_contact = request.data["saler_contact"]
                 super(ContractViewSet, self).create(request, *args, **kwargs)
@@ -130,7 +130,7 @@ class ContractViewSet(viewsets.ModelViewSet):
             return Response(
                 {"result": request.data, "message": "Contract successfully updated"}
             )
-        elif self.request.user.role.pk == 2 or self.request.user.is_admin == True:
+        elif self.request.user.is_admin == True or self.request.user.role.pk == 2:
             super(ContractViewSet, self).update(request, *args, **kwargs)
             try:
                 signed_status = request.data["signed_status"]

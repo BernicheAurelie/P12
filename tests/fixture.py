@@ -4,16 +4,8 @@ from clients.models import Client
 from contracts.models import Contract
 from events.models import Event, Event_status
 
-# from faker import Faker
-
 
 class TestSetUp(APITestCase):
-    def created(self, response):
-        return response.json()[0]["date_created"]
-
-    def updated(self, response):
-        return response.json()[0]["date_updated"]
-
     def setUp(self):
         self.user_role1 = User_role.objects.create(id=1, user_role="saler")
         self.user_role2 = User_role.objects.create(id=2, user_role="manager")
@@ -22,13 +14,7 @@ class TestSetUp(APITestCase):
         role1 = User_role.objects.get(id=1)
         role2 = User_role.objects.get(id=2)
         role3 = User_role.objects.get(id=3)
-
-        # self.fake = Faker()
-        # self.user1 = User(id=1,
-        #     first_name= self.fake.first_name(), last_name= self.fake.last_name(), username= self.fake.unique.email().split('@')[0],
-        #     email=self.fake.unique.email(), role=role1, is_admin= "True",
-        #     password="test1234",
-        #     )
+        
         self.user1 = User.objects.create(
             first_name="test1",
             last_name="user1",
@@ -38,9 +24,8 @@ class TestSetUp(APITestCase):
             is_admin="True",
             password="test1234",
         )
-        user1 = User.objects.get(first_name="test1")
-        # self.user1.set_password("test1234")
-        # self.user1.save()
+        self.user1.set_password(self.user1.password)
+        self.user1.save()
 
         self.user2 = User.objects.create(
             first_name="test2",
@@ -51,6 +36,9 @@ class TestSetUp(APITestCase):
             is_admin="False",
             password="test1234",
         )
+        self.user2.set_password(self.user2.password)
+        self.user2.save()
+
         self.user3 = User.objects.create(
             first_name="test3",
             last_name="user3",
@@ -60,6 +48,9 @@ class TestSetUp(APITestCase):
             is_admin="False",
             password="test1234",
         )
+        self.user3.set_password(self.user3.password)
+        self.user3.save()
+        
         self.manager_1 = User.objects.create(
             first_name="manager_1",
             last_name="manager_1",
@@ -69,6 +60,9 @@ class TestSetUp(APITestCase):
             is_admin="False",
             password="test1234",
         )
+        self.manager_1.set_password(self.manager_1.password)
+        self.manager_1.save()
+
         self.saler_1 = User.objects.create(
             first_name="saler_1",
             last_name="saler_1",
@@ -78,6 +72,9 @@ class TestSetUp(APITestCase):
             is_admin="False",
             password="test1234",
         )
+        self.saler_1.set_password(self.saler_1.password)
+        self.saler_1.save()
+
         self.technician_1 = User.objects.create(
             first_name="technician_1",
             last_name="technician_1",
@@ -87,6 +84,9 @@ class TestSetUp(APITestCase):
             is_admin="False",
             password="test1234",
         )
+        self.technician_1.set_password(self.technician_1.password)
+        self.technician_1.save()
+
         self.client_1 = Client.objects.create(
             first_name="client_1",
             last_name="client_1",
@@ -126,17 +126,17 @@ class TestSetUp(APITestCase):
             notes="ras",
         )
 
-    def tearDown(self):
+    # def tearDown(self):
         # print("***************** clear db ***********")
-        list_user = User.objects.all()
+        # list_user = User.objects.all()
         # print("******************** list user1: ", list_user)
-        list_user_role = User_role.objects.all()
+        # list_user_role = User_role.objects.all()
         # print("******************** list user_role: ", list_user_role)
-        clients = Client.objects.all()
+        # clients = Client.objects.all()
         # print("******************** list clients : ", clients)
-        contracts = Contract.objects.all()
+        # contracts = Contract.objects.all()
         # print("******************** list contracts : ", contracts)
-        events = Event.objects.all()
+        # events = Event.objects.all()
         # print("******************** list events : ", events)
         # User.objects.all().delete()
         # user1 = User.objects.filter(first_name='test1')

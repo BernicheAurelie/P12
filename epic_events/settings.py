@@ -107,7 +107,7 @@ DATABASES = {
     }
 }
 
-# DJANGO_SETTINGS_MODULE = 'epic_events.settings'
+DJANGO_SETTINGS_MODULE = 'epic_events.settings'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

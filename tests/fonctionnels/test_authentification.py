@@ -7,6 +7,7 @@ from tests.fonctionnels.test_setup import TestSetUp
 
 class TestAuthentification(TestSetUp):
     def test_open_chrome_window(self):
+        time.sleep(10)
         self.browser.get("http://127.0.0.1:8000/authentification/login/")
         title = self.browser.find_element_by_tag_name('h3')
         assert "Django REST framework" in title.text
@@ -81,27 +82,29 @@ class TestAuthentification(TestSetUp):
         add_link = self.browser.find_elements_by_class_name("addlink")
         user_add_link = add_link[5]
         user_add_link.send_keys(Keys.RETURN)
+        input_username = self.browser.find_element_by_name("username")
+        input_username.send_keys("test_username")
         input_password = self.browser.find_element_by_name("password")
         input_password.send_keys("test_pswd")
-        select_group = self.browser.find_element(By.TAG_NAME, 'option')
-        select_group.click()
-        select_perm = self.browser.find_element(By.XPATH, "//option[@value='33']")
-        select_perm.click()
         input_first_name = self.browser.find_element_by_name("first_name")
         input_first_name.send_keys("test_first_name")
         input_last_name = self.browser.find_element_by_name("last_name")
         input_last_name.send_keys("test_last_name")
-        input_username = self.browser.find_element_by_name("username")
-        input_username.send_keys("test_username")
         input_email = self.browser.find_element_by_name("email")
         input_email.send_keys("test_email@test.com")
+        select_group = self.browser.find_element(By.TAG_NAME, 'option')
+        select_group.click()
+        select_perm = self.browser.find_element(By.XPATH, "//option[@value='33']")
+        select_perm.click()
         select = self.browser.find_element(By.ID, 'id_role') # <select name="role" required="" id="id_role">
         select.send_keys(Keys.ARROW_DOWN)
         select.send_keys(Keys.RETURN) # <option value="2">manager</option>  
-        time.sleep(20)     
+        time.sleep(10)    
         submit_button = self.browser.find_element(By.XPATH, "//input[@type='submit']")
         submit_button.click()
+        time.sleep(10)
         accueil_user = self.browser.find_element(By.ID, 'content') #<div id="content" class=""> <h1>Select user to change</h1>
-        assert "Select user to change" in accueil_user.text
-        new_user = self.browser.find_element_by_class_name('field-first_name')
-        assert "test_first_name" in new_user.text
+        assert "Change user" in accueil_user.text
+        new_user = self.browser.find_element_by_class_name("success")
+        print(new_user.text)
+        assert "The user “test_username” was added successfully. You may edit it again below." in new_user.text

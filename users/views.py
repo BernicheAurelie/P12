@@ -28,28 +28,47 @@ class UserViewSet(viewsets.ModelViewSet):
     #         }
     #     )
 
-    def perform_create(self, serializer):
-        password = serializer.validated_data["password"]
-        username = serializer.validated_data["username"]
-        serializer.save()
-        user = User.objects.get(username=username)
-        user.set_password(password)
-        user.save()
-
-    def perform_update(self, serializer):
-        user = User.objects.get(id=self.kwargs["pk"])
-        # print("serializer.data: ", serializer.validated_data)
-        try:
-            password = serializer.validated_data["password"]
-            user.set_password(password)
-            user.save()
-            serializer.save()
-        except KeyError:
-            password = user.password
-            user.set_password(password)
-            user.save()
-            serializer.save()
-        # print("user password **************", user.password)
+    # def perform_create(self, serializer):
+    #     print("WE ARE IN PERFORM CREATE")
+    #     password = serializer.validated_data["password"]
+    #     username = serializer.validated_data["username"]
+    #     serializer.save()
+    #     user = User.objects.get(username=username)
+    #     user.set_password(password)
+    #     user.save()
+    #     # serializer.save()
+    #     print("PERFORM CREATE : user password **************", user.password)
+    # def update(self, request, *args, **kwargs):
+    #     super(UserViewSet, self).update(request, *args, **kwargs)
+    #     print(request.data)
+    #     user = User.objects.get(id=self.kwargs["pk"])
+    #     print(user)
+    #     return Response(
+    #         {
+    #             "result": request.data,
+    #             "message": "User successfully updated"
+    #         }
+    #     )
+    # def update(self, request, *args, **kwargs):
+    #     print("WE ARE IN VIEWS UPDATE")
+    #     serializer = self.serializer_class(request.user, data=request.data, partial=True)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save()
+    #     return Response(serializer.data)
+    # def perform_update(self, serializer):
+    #     print("WE ARE IN PERFORM uPDATE")
+    #     user = User.objects.get(id=self.kwargs["pk"])
+    #     # print("serializer.data: ", serializer.validated_data)
+    #     try:
+    #         password = serializer.validated_data["password"]
+    #         user.set_password(password)
+    #         user.save()
+    #     except KeyError:
+    #         password = user.password
+    #         user.set_password(password)
+    #         user.save()
+    #     serializer.save()
+    #     print("PERFORM UPDATE : user password **************", user.password)
 
     def list(self, request):
         queryset = User.objects.all()

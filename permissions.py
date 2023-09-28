@@ -100,17 +100,6 @@ class IsSalerForClient(BasePermission):
                 )
                 return False
 
-            # if view.action == "create":
-            #     if request.user.role.pk ==1:
-            #         logger.info("Saler: allowed to create clients")
-            #         return True
-            #     else:
-            #         logger.warning(f"{request.user.role} => not saler => forbidden to create clients")
-            #         return False
-            # else:
-            #     logger.warning(f"{request.user}: {view.action} only allowed to the sales contact")
-            #     return False
-
 
 class IsSalerForContract(BasePermission):
     logger.debug("Are you saler to access contracts?")
