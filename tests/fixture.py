@@ -114,8 +114,8 @@ class TestSetUp(APITestCase):
         self.event_status_3_finished = Event_status.objects.create(id=3, tag="finished")
 
         event_status_1_upcoming = Event_status.objects.get(id=1)
-        event_status_2_current = Event_status.objects.get(id=2)
-        event_status_3_finished = Event_status.objects.get(id=3)
+        # event_status_2_current = Event_status.objects.get(id=2)
+        # event_status_3_finished = Event_status.objects.get(id=3)
 
         self.event_2 = Event.objects.create(
             client_id=self.client_2,

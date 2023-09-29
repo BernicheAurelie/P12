@@ -1,5 +1,4 @@
 from rest_framework.permissions import BasePermission
-from users.models import User
 from contracts.models import Contract
 from clients.models import Client
 from events.models import Event
@@ -45,29 +44,29 @@ class IsManager(BasePermission):
             return False
 
 
-class IsOwnerProfile(BasePermission):
-    logger.debug("Is you're own profile?")
+# class IsOwnerProfile(BasePermission):
+#     logger.debug("Is you're own profile?")
 
-    def has_permission(self, request, view):
-        logger.debug("user profile?")
-        try:
-            user = User.objects.get(id=view.kwargs["pk"])
-            if user.id == request.user.pk and view.action in (
-                "list",
-                "retrieve",
-                "update",
-                "partial_update",
-            ):
-                logger.info(
-                    f"{request.user}: allowed, \
-                        you can get and update your profile but not delete it"
-                )
-                return True
-        except KeyError:
-            logger.warning(
-                f"{request.user}: you are {request.user.role}. Manage users forbidden"
-            )
-            return False
+#     def has_permission(self, request, view):
+#         logger.debug("user profile?")
+#         try:
+#             user = User.objects.get(id=view.kwargs["pk"])
+#             if user.id == request.user.pk and view.action in (
+#                 "list",
+#                 "retrieve",
+#                 "update",
+#                 "partial_update",
+#             ):
+#                 logger.info(
+#                     f"{request.user}: allowed, \
+#                         you can get and update your profile but not delete it"
+#                 )
+#                 return True
+#         except KeyError:
+#             logger.warning(
+#                 f"{request.user}: you are {request.user.role}. Manage users forbidden"
+#             )
+#             return False
 
 
 class IsSalerForClient(BasePermission):

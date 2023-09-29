@@ -9,12 +9,12 @@ from clients.serializers import ClientSerializer
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-    http_method_names = ["get", "post", "put", "delete"]
+    http_method_names = ["get", "post", "put", 'patch', "delete"]
     permission_classes = [
         IsAuthenticated,
         IsAdmin | IsManager | Readonly | IsSalerForClient,
     ]
-    filterset_fields = ["last_name", "email"]
+    filterset_fields = ["last_name", "email", "sales_contact", "existing"]
     search_fields = ["last_name", "email"]
 
     def perform_create(self, serializer):

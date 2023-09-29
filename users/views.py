@@ -1,8 +1,8 @@
 from rest_framework import viewsets
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from permissions import IsManager, IsAdmin, IsOwnerProfile
+from rest_framework import filters as f
+from django_filters import rest_framework as filter
+from permissions import IsManager, IsAdmin
 from users.models import User, User_role
 from users.serializers import UserSerializer, UserListSerializer, UserRoleSerializer
 
@@ -10,22 +10,22 @@ from users.serializers import UserSerializer, UserListSerializer, UserRoleSerial
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, IsAdmin | IsManager | IsOwnerProfile]
-    filterset_fields = ["role", "is_admin"]
+    http_method_names = ["get", "post", "put", "patch", "delete"]
+    permission_classes = [IsAuthenticated, IsAdmin | IsManager]
+    filter_backends = [filter.DjangoFilterBackend, f.SearchFilter, f.OrderingFilter]
+    filterset_fields = ["role__id", "is_admin"]
     search_fields = ["username", "email"]
     ordering_fields = ["role", "username"]
 
-    def list(self, request):
-        queryset = User.objects.all()
-        serializer = UserListSerializer(queryset, many=True)
-        # return self.get_paginated_response(self.paginate_queryset(serializer.data))
-        return Response(serializer.data)
+    def get_queryset(self):
+        users = User.objects.all()
+        return users
 
-    def retrieve(self, request, pk=None):
-        queryset = User.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return UserListSerializer
+        else:
+            return UserSerializer
 
 
 class UserRoleViewSet(viewsets.ModelViewSet):

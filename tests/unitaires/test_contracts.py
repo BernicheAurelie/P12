@@ -137,7 +137,6 @@ class TestContract(TestSetUp):
         contract = Contract.objects.get(payment_due="2025-01-01T13:39:47.825918Z")
         self.assertEqual(response4.status_code, 200)
         self.assertEqual(response4.data["message"], "Contract successfully updated")
-        # self.assertEqual(second_contract.client.existing, True)
         self.assertEqual(contract.client.existing, True)
         response5 = self.client.patch(
             "/contracts/" + str(second_contract.id) + "/",
@@ -205,7 +204,7 @@ class TestContract(TestSetUp):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(new_contract.client.existing, True)
-        response2 = self.client.patch(
+        self.client.patch(
             "/contracts/" + str(new_contract.id) + "/",
             data={
                 "client": self.client_1.id,
@@ -217,7 +216,7 @@ class TestContract(TestSetUp):
         response3 = self.client.get("/contracts/" + str(new_contract.id) + "/")
         self.assertEqual(response3.json()["amount"], 600)
         self.assertEqual(new_contract.client.existing, True)
-        response4 = self.client.patch(
+        self.client.patch(
             "/contracts/" + str(new_contract.id) + "/",
             data={
                 "client": self.client_1.id,
@@ -266,7 +265,7 @@ class TestContract(TestSetUp):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(new_contract.client.existing, True)
-        response2 = self.client.patch(
+        self.client.patch(
             "/contracts/" + str(new_contract.id) + "/",
             data={
                 "client": self.client_1.id,
@@ -281,31 +280,3 @@ class TestContract(TestSetUp):
         self.assertEqual(response4.status_code, 204)
         response5 = self.client.get("/contracts/" + str(new_contract.id) + "/")
         self.assertEqual(response5.data["detail"], "Not found.")
-
-    # def test_CRUD_contract_for_manager(self):
-    #     self.client.force_login(self.manager_1)
-    #     response=self.client.get('/contracts/')
-    #     self.assertEqual(response.status_code, 200)
-    #     response1 = self.client.post('/contracts/', data={
-    #         "client":self.client_1.id,
-    #         'signed_status': 'true',
-    #         "amount":100,
-    #         'payment_due': "2025-01-01T13:39:47.825918Z",
-    #         "saler_contact": self.saler_1.id
-    #     })
-    #     self.assertEqual(response1.data["message"], "Contract successfully created")
-    #     new_contract = Contract.objects.get(payment_due=response1.data['result']['payment_due'])
-    #     self.assertEqual(response1.status_code, 200)
-    #     self.assertEqual(new_contract.client.existing, True)
-    #     response2 = self.client.patch('/contracts/'+ str(new_contract.id)+ '/', data={
-    #         "client":self.client_1.id,
-    #         'signed_status': 'true',
-    #         "amount":600,
-    #         'payment_due': "2030-01-01T13:39:47.825918Z"
-    #     })
-    #     response3 = self.client.get('/contracts/'+ str(new_contract.id)+ '/')
-    #     self.assertEqual(response3.json()["amount"], 600)
-    #     response4 = self.client.delete('/contracts/'+ str(new_contract.id)+ '/')
-    #     self.assertEqual(response4.status_code, 204)
-    #     response5 = self.client.get('/contracts/'+ str(new_contract.id)+ '/')
-    #     self.assertEqual(response5.data["detail"], "Not found.")

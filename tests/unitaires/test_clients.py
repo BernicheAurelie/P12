@@ -68,7 +68,7 @@ class TestClient(TestSetUp):
         )
         response3 = self.client.get("/clients/")
         self.assertEqual(response3.json()[2]["first_name"], "client12_modified")
-        response4 = self.client.delete("/clients/" + str(client12.id) + "/")
+        self.client.delete("/clients/" + str(client12.id) + "/")
         response5 = self.client.get("/clients/" + str(client12.id) + "/")
         self.assertEqual(response5.data["detail"], "Not found.")
         response6 = self.client.post(

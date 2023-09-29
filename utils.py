@@ -7,11 +7,13 @@ logging.config.dictConfig(
         "disable_existing_loggers": False,
         "formatters": {
             "console": {
-                "format": "%(asctime)s - level: %(levelname)s - message: %(message)s from: %(funcName)-8s - %(name)-8s",
+                "format": "%(asctime)s - level: %(levelname)s - message: %(message)s \
+                    from: %(funcName)-8s - %(name)-8s",
                 "datefmt": "%H:%M:%S",
             },
             "file": {
-                "format": "%(asctime)s %(levelname)-8s - message: %(message)8s - from: %(funcName)-8s - (%(filename)-12s)",
+                "format": "%(asctime)s %(levelname)-8s - message: %(message)8s - \
+                    from: %(funcName)-8s - (%(filename)-12s)",
                 "datefmt": "%d-%b-%Y %H:%M:%S",
             },
         },

@@ -29,7 +29,7 @@ class TestUsers(TestSetUp):
         self.assertEqual(response2.status_code, 200)
         user = User.objects.get(username="test")
         url = ("/users/" + str(user.id) + "/")
-        res = self.client.put(
+        self.client.put(
             f"{url}",
             data={
                 "first_name": "test",
@@ -113,22 +113,17 @@ class TestUsers(TestSetUp):
         response = self.client.get("/users/")
         self.assertEqual(response.status_code, 403)
         response2 = self.client.get("/users/" + str(self.saler_1.id) + "/")
-        self.assertEqual(response2.status_code, 200)
-        response3 = self.client.patch(
-            "/users/" + str(self.saler_1.id) + "/",
-            data={
-                "first_name": "THE saler!",
-            },
-        )
-        self.assertEqual(response3.status_code, 200)
-        response4 = self.client.get("/users/" + str(self.saler_1.id) + "/")
-        self.assertEqual(response4.json()["first_name"], "THE saler!")
-        response5 = self.client.delete("/users/" + str(self.saler_1.id) + "/")
+        self.assertEqual(response2.status_code, 403)
         self.assertEqual(
-            response5.data["detail"],
+            response2.data["detail"],
             "You do not have permission to perform this action.",
         )
-        self.assertEqual(response5.status_code, 403)
+        response3 = self.client.delete("/users/" + str(self.saler_1.id) + "/")
+        self.assertEqual(
+            response3.data["detail"],
+            "You do not have permission to perform this action.",
+        )
+        self.assertEqual(response3.status_code, 403)
         self.client.force_login(self.technician_1)
-        response6 = self.client.get("/users/")
-        self.assertEqual(response6.status_code, 403)
+        response4 = self.client.get("/users/")
+        self.assertEqual(response4.status_code, 403)

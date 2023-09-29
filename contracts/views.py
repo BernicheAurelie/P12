@@ -47,7 +47,8 @@ class ContractViewSet(viewsets.ModelViewSet):
         client = Client.objects.get(id=self.request.data["client"])
         if client.sales_contact == self.request.user or client.sales_contact is None:
             try:
-                saler_contact = request.data["saler_contact"]
+                # saler_contact = request.data["saler_contact"]
+                request.data["saler_contact"]
             except KeyError:
                 request.data["saler_contact"] = self.request.user.pk
             request.POST._mutable = False
@@ -70,7 +71,8 @@ class ContractViewSet(viewsets.ModelViewSet):
             )
         elif self.request.user.is_admin is True or self.request.user.role.pk == 2:
             try:
-                saler_contact = request.data["saler_contact"]
+                # saler_contact = request.data["saler_contact"]
+                request.data["saler_contact"]
                 super(ContractViewSet, self).create(request, *args, **kwargs)
                 try:
                     signed_status = request.data["signed_status"]
@@ -113,7 +115,8 @@ class ContractViewSet(viewsets.ModelViewSet):
             or contract.saler_contact is None
         ):
             try:
-                saler_contact = request.data["saler_contact"]
+                # saler_contact = request.data["saler_contact"]
+                request.data["saler_contact"]
             except KeyError:
                 request.POST._mutable = True
                 request.data["saler_contact"] = contract.saler_contact.pk
