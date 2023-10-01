@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import filters as f
-from django_filters import rest_framework as filter
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters import rest_framework as filters
 from permissions import IsManager, IsAdmin
 from users.models import User, User_role
 from users.serializers import UserSerializer, UserListSerializer, UserRoleSerializer
@@ -12,7 +12,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     http_method_names = ["get", "post", "put", "patch", "delete"]
     permission_classes = [IsAuthenticated, IsAdmin | IsManager]
-    filter_backends = [filter.DjangoFilterBackend, f.SearchFilter, f.OrderingFilter]
+    filter_backends = [filters.DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ["role__id", "is_admin"]
     search_fields = ["username", "email"]
     ordering_fields = ["role", "username"]

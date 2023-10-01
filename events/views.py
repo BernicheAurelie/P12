@@ -1,3 +1,5 @@
+from django_filters import rest_framework as filters
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -11,12 +13,41 @@ from events.serializers import EventSerializer, EventStatusSerializer
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    http_method_names = ["get", "post", "put", 'patch', "delete"]
     permission_classes = [
         IsAuthenticated,
         IsAdmin | IsManager | Readonly | IsSalerForEvents | IsTechnician,
     ]
+    filter_backends = [filters.DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ["client_id__email", "client_id__id", "event_date", "event_status__id"]
+
+    class EventFilter(filters.FilterSet):
+        event_date = filters.DateFilter(
+            field_name="event_date",
+            label='date in YYYY-MM-DD',
+            lookup_expr='contains'
+        )
+        client_id = filters.NumberFilter(
+            field_name="client_id",
+            label='client id'
+        )
+        client_id__email = filters.CharFilter(
+            field_name="client_id__email",
+            label='client email'
+        )
+        STATUS_CHOICES = (
+            (1, 'upcoming'),
+            (2, 'current'),
+            (2, 'finished'),
+        )
+        event_status = filters.ChoiceFilter(
+            field_name='event_status',
+            label='event status',
+            choices=STATUS_CHOICES
+        )
+
     filterset_fields = ["client_id", "client_id__email", "event_date", "event_status"]
-    search_fields = ["client_id", "client_id__email", "event_date", "event_status"]
+    filterset_class = EventFilter
 
     def create(self, request, *args, **kwargs):
         logger.debug("Creating event")

@@ -1,6 +1,8 @@
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters import rest_framework as filters
 from permissions import IsAdmin, IsManager, Readonly, IsSalerForContract
 from utils import logger
 from contracts.models import Contract
@@ -15,6 +17,7 @@ class ContractViewSet(viewsets.ModelViewSet):
         IsAuthenticated,
         IsAdmin | IsManager | Readonly | IsSalerForContract,
     ]
+    filter_backends = [filters.DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = [
         "client",
         "client__email",
@@ -26,10 +29,10 @@ class ContractViewSet(viewsets.ModelViewSet):
         "payment_due",
     ]
     search_fields = [
-        "client",
+        "client__id",
         "client__email",
         "client__existing",
-        "saler_contact",
+        "saler_contact__id",
         "date_created",
         "amount",
         "payment_due",

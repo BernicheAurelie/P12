@@ -167,7 +167,14 @@ class IsSalerForEvents(BasePermission):
                 return False
         except KeyError:
             logger.warning("Contract not found")
-            return False
+            if request.user.role.pk == 1:
+                logger.info("Saler: allowed to create and get events")
+                return True
+            else:
+                logger.warning(
+                    f"{request.user.role} => not saler => forbidden to create events"
+                )
+                return False
 
 
 class IsTechnician(BasePermission):
